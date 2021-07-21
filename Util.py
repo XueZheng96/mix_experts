@@ -9,6 +9,7 @@ from torch import nn
 import numpy as np
 from torchvision import datasets, transforms
 from numpy.random import choice
+from copy import deepcopy
 
 
 def Sample_node(k, node_idx, list_of_candidates, probability_distribution):
@@ -25,14 +26,12 @@ def Sample_node(k, node_idx, list_of_candidates, probability_distribution):
     return fintuned_node_sets
 
 
+
 def FedAvg(w,alpha):
-    w_avg = w[0]
+    w_avg = deepcopy(w[0])
     n_clients = len(w)
     
     alpha = alpha/np.sum(alpha)
-    #print(np.sum(alpha))
-    #print(alpha)
-    #alpha = np.random.uniform(0,1,n_clients)
     
     for l in w_avg.keys():
         w_avg[l] = w_avg[l] - w_avg[l]
@@ -42,6 +41,8 @@ def FedAvg(w,alpha):
         for k in range(0,n_clients): #for each client
             w_avg[layer] += alpha[k]*w[k][layer]
     return w_avg
+
+
 
 
 def Preparedata(dataset_train, dataset_test, ntrain, ntest, class_number, percent):
